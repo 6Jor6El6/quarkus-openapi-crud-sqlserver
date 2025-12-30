@@ -1,128 +1,275 @@
-openapi: 3.0.3
+# yaml
+openapi: 3.0.1
 info:
   title: Customer CRUD API
   version: 1.0.0
+  description: >
+    API REST para gestionar clientes (listar, crear, obtener, actualizar y eliminar).
+    Diseñada para integración con un servicio Quarkus en el contexto de ejemplo.
+  contact:
+    name: Equipo de Desarrollo
+    email: dev@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
+# Servidor relativo (útil para despliegues en entornos de microservicios o reverse-proxy)
 servers:
   - url: /api
+    description: Servidor relativo usado en despliegues locales y entornos de integración
+
+tags:
+  - name: Customers
+    description: Operaciones relacionadas con clientes (CRUD)
 
 paths:
   /customers:
     get:
+      tags:
+        - Customers
+      summary: Listar clientes
+      description: >
+        Devuelve la lista completa de clientes. Actualmente la API no implementa paginación;
+        si hay muchos registros se recomienda usar filtros/paginación en futuras versiones.
       operationId: listCustomers
       responses:
         "200":
-          description: OK
+          description: OK - Lista de clientes
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Customer"
+                  $ref: '#/components/schemas/Customer'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
     post:
+      tags:
+        - Customers
+      summary: Crear cliente
+      description: >
+        Crea un nuevo cliente con los datos proporcionados. Valida que `name` y `email` estén presentes
+        y que el formato de `email` sea válido. Devuelve el cliente creado con su `id`.
       operationId: createCustomer
       requestBody:
+        description: Datos del cliente a crear
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateCustomerRequest"
+              $ref: '#/components/schemas/CreateCustomerRequest'
       responses:
         "201":
-          description: Created
+          description: Created - Cliente creado correctamente
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Customer"
+                $ref: '#/components/schemas/Customer'
+        "400":
+          description: Bad Request - Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /customers/{id}:
+    # Parámetro path común a varias operaciones; descrito para claridad
+    parameters:
+      - name: id
+        in: path
+        description: Identificador único del cliente (64-bit integer)
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 123
+
     get:
+      tags:
+        - Customers
+      summary: Obtener cliente por id
+      description: >
+        Recupera un cliente por su identificador. Si no existe, devuelve 404.
       operationId: getCustomer
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: integer, format: int64 }
       responses:
         "200":
-          description: OK
+          description: OK - Cliente encontrado
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Customer"
+                $ref: '#/components/schemas/Customer'
         "404":
-          description: Not Found
+          description: Not Found - Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
     put:
+      tags:
+        - Customers
+      summary: Actualizar cliente
+      description: >
+        Actualiza los datos de un cliente existente. El cuerpo debe contener los campos requeridos;
+        si el cliente no existe, devuelve 404.
       operationId: updateCustomer
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: integer, format: int64 }
       requestBody:
+        description: Datos para actualizar el cliente
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateCustomerRequest"
+              $ref: '#/components/schemas/UpdateCustomerRequest'
       responses:
         "200":
-          description: OK
+          description: OK - Cliente actualizado
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Customer"
+                $ref: '#/components/schemas/Customer'
+        "400":
+          description: Bad Request - Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "404":
-          description: Not Found
+          description: Not Found - Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
     delete:
+      tags:
+        - Customers
+      summary: Eliminar cliente
+      description: >
+        Elimina el cliente indicado por `id`. Responde 204 si la eliminación fue exitosa.
       operationId: deleteCustomer
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: integer, format: int64 }
       responses:
         "204":
-          description: No Content
+          description: No Content - Cliente eliminado correctamente
         "404":
-          description: Not Found
+          description: Not Found - Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
     Customer:
       type: object
-      required: [id, name, email]
+      description: Representación de un cliente en el sistema
+      required:
+        - id
+        - name
+        - email
       properties:
         id:
           type: integer
           format: int64
+          description: Identificador único del cliente (generado por el sistema)
+          example: 123
         name:
           type: string
+          description: Nombre completo del cliente
           minLength: 1
+          example: "María Pérez"
         email:
           type: string
           format: email
+          description: Correo electrónico de contacto (debe ser único en el sistema)
+          example: "maria.perez@example.com"
 
     CreateCustomerRequest:
       type: object
-      required: [name, email]
+      description: Datos requeridos para crear un cliente
+      required:
+        - name
+        - email
       properties:
         name:
           type: string
+          description: Nombre del cliente
           minLength: 1
+          example: "Juan López"
         email:
           type: string
           format: email
+          description: Correo electrónico válido
+          example: "juan.lopez@example.com"
 
     UpdateCustomerRequest:
       type: object
-      required: [name, email]
+      description: Datos usados para actualizar un cliente existente
+      required:
+        - name
+        - email
       properties:
         name:
           type: string
+          description: Nuevo nombre del cliente
           minLength: 1
+          example: "Juan López"
         email:
           type: string
           format: email
+          description: Nuevo correo electrónico del cliente
+          example: "juan.lopez@example.com"
+
+    ErrorResponse:
+      type: object
+      description: Estructura estándar para errores de la API
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: Código de error HTTP asociado (ej. 400, 404, 500)
+          example: 400
+        message:
+          type: string
+          description: Mensaje legible con la causa del error
+          example: "Validation failed: email is required"
+        details:
+          type: object
+          description: Información adicional opcional (por ejemplo, errores de validación por campo)
+          example:
+            email: "must be a valid email address"
+
+# Comentarios:
+# - Mantener los summaries y descriptions ayuda a generar documentación legible (Swagger UI).
+# - Añadir el esquema ErrorResponse permite respuestas consistentes en casos de fallo.
+# - Para futuras mejoras: agregar paginación en GET /customers y endpoints de filtrado/búsqueda.

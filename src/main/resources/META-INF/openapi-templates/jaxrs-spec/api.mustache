@@ -1,0 +1,65 @@
+package {{package}};
+
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+
+{{#imports}}
+import {{import}};
+{{/imports}}
+
+{{#hasPathParams}}
+import jakarta.ws.rs.PathParam;
+{{/hasPathParams}}
+{{#hasQueryParams}}
+import jakarta.ws.rs.QueryParam;
+{{/hasQueryParams}}
+{{#hasHeaderParams}}
+import jakarta.ws.rs.HeaderParam;
+{{/hasHeaderParams}}
+{{#hasCookieParams}}
+import jakarta.ws.rs.CookieParam;
+{{/hasCookieParams}}
+
+@jakarta.annotation.Generated(
+    value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen",
+    comments = "Generator version: {{generatorVersion}}"
+)
+{{#useTag}}@Path("{{{basePath}}}"){{/useTag}}
+public interface {{classname}} {
+
+{{#operations}}
+{{#operation}}
+    /**
+     * {{#summary}}{{summary}}{{/summary}}{{^summary}}{{operationId}}{{/summary}}
+     *
+     * {{#description}}{{description}}{{/description}}
+     *
+{{#allParams}}
+     * @param {{paramName}} {{#description}}{{description}}{{/description}}{{^description}}{{baseName}}{{/description}}
+{{/allParams}}
+     * @return {{{returnType}}}
+     */
+    @{{httpMethod}}
+    {{#path}}@Path("{{{path}}}"){{/path}}
+    {{#consumes}}
+    @Consumes({{#mediaTypes}} "{{{mediaType}}}"{{^-last}},{{/-last}}{{/mediaTypes}})
+    {{/consumes}}
+    {{#produces}}
+    @Produces({{#mediaTypes}} "{{{mediaType}}}"{{^-last}},{{/-last}}{{/mediaTypes}})
+    {{/produces}}
+    {{{returnType}}} {{operationId}}(
+{{#allParams}}
+        {{#isPathParam}}@PathParam("{{baseName}}") {{/isPathParam}}
+        {{#isQueryParam}}@QueryParam("{{baseName}}") {{/isQueryParam}}
+        {{#isHeaderParam}}@HeaderParam("{{baseName}}") {{/isHeaderParam}}
+        {{#isCookieParam}}@CookieParam("{{baseName}}") {{/isCookieParam}}
+        {{#isBodyParam}}@Valid {{/isBodyParam}}{{#required}}@NotNull {{/required}}
+        {{{dataType}}} {{paramName}}{{^-last}},{{/-last}}
+{{/allParams}}
+    );
+
+{{/operation}}
+{{/operations}}
+}

@@ -122,6 +122,10 @@
                             <output>${project.build.directory}/generated-sources/openapi</output>
                             <addCompileSourceRoot>true</addCompileSourceRoot>
 
+<!--                            <templateDirectory>-->
+<!--                                ${project.basedir}/src/main/resources/META-INF/openapi-templates/jaxrs-spec-->
+<!--                            </templateDirectory>-->
+
                             <generatorName>jaxrs-spec</generatorName>
                             <library>quarkus</library>
 
@@ -136,12 +140,22 @@
                                 <!-- ✅ generar solo interfaces (contratos) -->
                                 <interfaceOnly>true</interfaceOnly>
                                 <!-- opcional: que no genere docs/tests -->
-                                <documentationProvider>none</documentationProvider>
+<!--                                <documentationProvider>none</documentationProvider>-->
+                                <!-- ✅ genera JavaDoc a partir de openapi.yaml -->
+                                <documentationProvider>source</documentationProvider>
                             </configOptions>
 
                             <additionalProperties>
                                 <useJakartaEe>true</useJakartaEe>
+                                <!-- opcional -->
+<!--                                <generateApiTests>false</generateApiTests>-->
+<!--                                <generateModelTests>false</generateModelTests>-->
+<!--                                documentación (HTML/Markdown)-->
+<!--                                <generateApiDocumentation>true</generateApiDocumentation>-->
+<!--                                <generateModelDocumentation>false</generateModelDocumentation>-->
+                                <documentationProvider>source</documentationProvider>
                             </additionalProperties>
+
                         </configuration>
                     </execution>
                 </executions>
@@ -175,6 +189,8 @@
 <!--            </plugin>           -->
         </plugins>
     </build>
+
+
 
     <profiles>
         <profile>

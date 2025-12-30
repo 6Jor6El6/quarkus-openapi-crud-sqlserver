@@ -1,0 +1,31 @@
+package {{package}};
+
+{{#imports}}
+import {{import}};
+{{/imports}}
+
+{{#description}}
+/**
+ * {{description}}
+ */
+{{/description}}
+public class {{classname}} {
+
+{{#vars}}
+    /**
+     * {{description}}
+     */
+    private {{datatype}} {{name}};
+{{/vars}}
+
+{{#vars}}
+    public {{datatype}} get{{nameInCamelCase}}() {
+        return {{name}};
+    }
+
+    public void set{{nameInCamelCase}}({{datatype}} {{name}}) {
+        this.{{name}} = {{name}};
+    }
+
+{{/vars}}
+}
