@@ -1,0 +1,50 @@
+quarkus:
+  http:
+    port: 8080
+
+  # =========================
+  # OpenAPI / Swagger
+  # =========================
+  swagger-ui:
+    always-include: true
+
+  smallrye-openapi:
+    path: /openapi
+
+  # =========================
+  # Datasource H2
+  # =========================
+#  datasource:
+#    db-kind: h2
+#    username: sa
+#    password: sa
+#    jdbc:
+#      url: >
+#        jdbc:h2:file:./data/demo;
+#        MODE=MSSQLServer;
+#        DATABASE_TO_UPPER=false;
+#        DB_CLOSE_DELAY=-1
+
+  # =========================
+  # Hibernate ORM (imperativo)
+  # =========================
+#  hibernate-orm:
+#    database:
+#      generation: none
+#    log:
+#      sql: true
+
+  # =========================
+  # Flyway
+  # =========================
+#  flyway:
+#    migrate-at-start: true
+#    locations: db/migration
+
+  # =========================
+  # H2 Console
+  # =========================
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2
