@@ -38,10 +38,16 @@
         </dependency>
 
         <!-- Hibernate ORM + Panache (imperativo) -->
-<!--        <dependency>-->
-<!--            <groupId>io.quarkus</groupId>-->
-<!--            <artifactId>quarkus-hibernate-orm-panache</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm-panache</artifactId>
+        </dependency>
+
+        <!-- JDBC H2 -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+        </dependency>
 
 <!--        &lt;!&ndash; JDBC SQL Server &ndash;&gt;-->
 <!--        <dependency>-->

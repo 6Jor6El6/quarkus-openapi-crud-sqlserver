@@ -14,11 +14,12 @@ quarkus:
   # =========================
   # Datasource H2
   # =========================
-#  datasource:
-#    db-kind: h2
-#    username: sa
-#    password: sa
-#    jdbc:
+  datasource:
+    db-kind: h2
+    username: sa
+    password: sa
+    jdbc:
+      url: jdbc:h2:mem:customersdb;DB_CLOSE_DELAY=-1;MODE=LEGACY
 #      url: >
 #        jdbc:h2:file:./data/demo;
 #        MODE=MSSQLServer;
@@ -28,11 +29,11 @@ quarkus:
   # =========================
   # Hibernate ORM (imperativo)
   # =========================
-#  hibernate-orm:
-#    database:
-#      generation: none
-#    log:
-#      sql: true
+  hibernate-orm:
+    database:
+      generation: drop-and-create
+    log:
+      sql: true
 
   # =========================
   # Flyway
@@ -44,7 +45,7 @@ quarkus:
   # =========================
   # H2 Console
   # =========================
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2
+  h2:
+    console:
+      enabled: true
+      path: /h2

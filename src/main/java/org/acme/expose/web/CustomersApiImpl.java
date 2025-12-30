@@ -1,20 +1,49 @@
 package org.acme.expose.web;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
+import jakarta.inject.Inject;
 import org.acme.model.api.CreateCustomerRequest;
 import org.acme.model.api.Customer;
 import org.acme.model.api.UpdateCustomerRequest;
+import org.acme.service.CustomerService;
+import org.acme.expose.web.CustomersApi;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
+
 
 @ApplicationScoped
-public class CustomersApiImpl implements CustomersApi {
+public class CustomersApiImpl implements  CustomersApi {
 
+    @Inject
+    CustomerService service;
+
+
+    @Override
+    public Customer createCustomer(CreateCustomerRequest createCustomerRequest) {
+        return service.create(createCustomerRequest);
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+        service.delete(id);
+    }
+
+    @Override
+    public Customer getCustomer(Long id) {
+        return service.get(id);
+    }
+
+    @Override
+    public List<Customer> listCustomers() {
+        return service.list();
+    }
+
+    @Override
+    public Customer updateCustomer(Long id, UpdateCustomerRequest updateCustomerRequest) {
+        return service.update(id, updateCustomerRequest);
+    }
+
+/*
     // Demo en memoria (luego lo cambiamos por DB)
     private final Map<Long, Customer> store = new ConcurrentHashMap<>();
     private final AtomicLong seq = new AtomicLong(0);
@@ -89,5 +118,5 @@ public class CustomersApiImpl implements CustomersApi {
         store.put(id, existing);
 
         return existing;
-    }
+    }*/
 }
