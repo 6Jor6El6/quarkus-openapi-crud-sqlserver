@@ -129,19 +129,17 @@
                             <modelPackage>org.acme.model.api</modelPackage>
 
                             <!-- 🔥 CLAVES -->
-<!--                            <configOptions>-->
-<!--                                <useJakarta>true</useJakarta>-->
-<!--                                <jakarta>true</jakarta>-->
-<!--                                <useBeanValidation>true</useBeanValidation>-->
-<!--                            </configOptions>-->
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
                                 <useBeanValidation>true</useBeanValidation>
                                 <useJakartaEe>true</useJakartaEe>
+                                <!-- ✅ generar solo interfaces (contratos) -->
+                                <interfaceOnly>true</interfaceOnly>
+                                <!-- opcional: que no genere docs/tests -->
+                                <documentationProvider>none</documentationProvider>
                             </configOptions>
 
                             <additionalProperties>
-<!--                                <jakarta>true</jakarta>-->
                                 <useJakartaEe>true</useJakartaEe>
                             </additionalProperties>
                         </configuration>
