@@ -119,7 +119,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/META-INF/openapi.yaml</inputSpec>
-                            <output>${project.build.directory}/generated-sources/openapi</output>
+                            <output>${project.build.directory}/generated-sources/openapi/src/gen/java</output>
                             <addCompileSourceRoot>true</addCompileSourceRoot>
 
 <!--                            <templateDirectory>-->
@@ -143,6 +143,8 @@
 <!--                                <documentationProvider>none</documentationProvider>-->
                                 <!-- ✅ genera JavaDoc a partir de openapi.yaml -->
                                 <documentationProvider>source</documentationProvider>
+                                <!-- ✅ CLAVE -->
+                                <sourceFolder>src/gen/java</sourceFolder>
                             </configOptions>
 
                             <additionalProperties>
