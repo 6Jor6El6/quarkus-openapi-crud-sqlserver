@@ -26,6 +26,23 @@ quarkus:
 #        DATABASE_TO_UPPER=false;
 #        DB_CLOSE_DELAY=-1
 
+# =========================
+# Logging
+# =========================
+#  log:
+#    level: INFO
+#    console:
+#      enable: true
+#      level: INFO
+  log:
+    category:
+      "org.hibernate.SQL":
+        level: DEBUG
+      "org.hibernate.orm.jdbc.bind":
+        level: TRACE
+
+
+
   # =========================
   # Hibernate ORM (imperativo)
   # =========================
