@@ -1,5 +1,5 @@
 package org.acme;
-
+/*
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -14,3 +14,4 @@ public class GreetingResource {
         return "Hello from Quarkus REST";
     }
 }
+*/

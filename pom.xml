@@ -15,6 +15,7 @@
         <quarkus.platform.version>3.23.0</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
+        <openapi.generator.version>7.6.0</openapi.generator.version>
     </properties>
 
     <dependencyManagement>
@@ -64,13 +65,23 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.quarkus</groupId>-->
+<!--            <artifactId>quarkus-rest</artifactId>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest</artifactId>
+            <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5-mockito</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -86,7 +97,6 @@
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
                 <version>${quarkus.platform.version}</version>
-                <extensions>true</extensions>
                 <executions>
                     <execution>
                         <goals>
@@ -97,12 +107,74 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler-plugin.version}</version>
-                <configuration>
-                    <parameters>true</parameters>
-                </configuration>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi.generator.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-openapi-jakarta</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/META-INF/openapi.yaml</inputSpec>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+
+                            <generatorName>jaxrs-spec</generatorName>
+                            <library>quarkus</library>
+
+                            <apiPackage>org.acme.expose.web</apiPackage>
+                            <modelPackage>org.acme.model.api</modelPackage>
+
+                            <!-- 🔥 CLAVES -->
+<!--                            <configOptions>-->
+<!--                                <useJakarta>true</useJakarta>-->
+<!--                                <jakarta>true</jakarta>-->
+<!--                                <useBeanValidation>true</useBeanValidation>-->
+<!--                            </configOptions>-->
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                                <useBeanValidation>true</useBeanValidation>
+                                <useJakartaEe>true</useJakartaEe>
+                            </configOptions>
+
+                            <additionalProperties>
+<!--                                <jakarta>true</jakarta>-->
+                                <useJakartaEe>true</useJakartaEe>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+
+
+
+            <!--            <plugin>-->
+<!--                <groupId>org.openapitools</groupId>-->
+<!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--                <version>${openapi.generator.version}</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>generate-openapi-jakarta</id>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals><goal>generate</goal></goals>-->
+<!--                        <configuration>-->
+<!--                            <inputSpec>${project.basedir}/src/main/resources/META-INF/openapi.yaml</inputSpec>-->
+<!--                            <output>${project.build.directory}/generated-sources/openapi</output>-->
+<!--                            <addCompileSourceRoot>true</addCompileSourceRoot>-->
+
+<!--                            <generatorName>jaxrs-spec</generatorName>-->
+<!--                            <library>quarkus</library>-->
+
+<!--                            <additionalProperties>-->
+<!--                                <useJakarta>true</useJakarta>-->
+<!--                            </additionalProperties>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>           -->
         </plugins>
     </build>
 
